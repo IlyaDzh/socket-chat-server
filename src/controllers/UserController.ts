@@ -1,15 +1,28 @@
 import express from 'express';
 
-import { UserModel } from '../schemas';
+import { UserModel } from '../models';
 
 class UserController {
-    show(req: express.Request, res: express.Response) {
+    showById(req: express.Request, res: express.Response) {
         const id: string = req.params.id;
         UserModel.findById(id, (err, user) => {
             if (err) {
                 return res.status(404).json({ message: "User not found" })
             }
             res.json(user);
+        });
+    };
+
+    getMe(req: express.Request, res: express.Response) {
+        
+    };
+
+    getAll(req: express.Request, res: express.Response) {
+        UserModel.find({}, (err, users) => {
+            if (err) {
+                return res.status(404).json({ message: "User list is empty" })
+            }
+            res.json(users);
         });
     };
 
