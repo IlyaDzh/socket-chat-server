@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface IMessage extends Document {
     author: {
@@ -9,13 +9,16 @@ export interface IMessage extends Document {
     text: string;
 }
 
-const MessageSchema = new Schema({
-    author: { type: Schema.Types.ObjectId, ref: "User", require: true },
-    text: String
-}, {
-    timestamps: true
-});
+const MessageSchema = new Schema(
+    {
+        author: { type: Schema.Types.ObjectId, ref: "User", require: true },
+        text: String
+    },
+    {
+        timestamps: true
+    }
+);
 
-const MessageModel = mongoose.model<IMessage>('Message', MessageSchema);
+const MessageModel = mongoose.model<IMessage>("Message", MessageSchema);
 
 export default MessageModel;

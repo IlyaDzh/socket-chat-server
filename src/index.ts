@@ -1,12 +1,17 @@
-import express from 'express';
+import express from "express";
+import dotenv from "dotenv";
 
-import './core/db';
-import createRoutes from './core/routes';
+dotenv.config();
+
+import "./core/db";
+import createRoutes from "./core/routes";
 
 const app = express();
 
 createRoutes(app);
 
-app.listen(3000, () => {
-    console.log(`Example app listening on port 3000!`);
+const PORT = process.env.PORT || 3003;
+
+app.listen(PORT, () => {
+    console.log(`Server: http://localhost:${PORT}`);
 });
