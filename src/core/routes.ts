@@ -1,8 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 
-import { UserController, MessageController } from "../controllers";
 import { updateLastSeen, checkAuth } from "../middlewares";
+import { signinValidation, signupValidation } from "../utils/validations";
+import { UserController, MessageController } from "../controllers";
 
 const createRoutes = (app: express.Express) => {
     app.use(bodyParser.json());
@@ -14,8 +15,8 @@ const createRoutes = (app: express.Express) => {
 
     app.get("/user/me", User.getMe);
     app.get("/user/all", User.getAll);
-    app.post("/user/signup", User.create);
-    app.post("/user/signin", User.login);
+    app.post("/user/signup", signupValidation, User.create);
+    app.post("/user/signin", signinValidation, User.login);
     app.get("/user/:id", User.showById);
     app.delete("/user/:id", User.delete);
 

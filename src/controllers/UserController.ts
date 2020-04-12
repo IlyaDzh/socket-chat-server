@@ -1,4 +1,6 @@
 import express from "express";
+import bcrypt from 'bcrypt';
+import { validationResult } from "express-validator";
 
 import { UserModel } from "../models";
 import { IUser } from "../models/User";
@@ -32,6 +34,13 @@ class UserController {
             fullname: req.body.fullname,
             password: req.body.password
         };
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
+
         const user = new UserModel(postData);
         user.save()
             .then((obj: any) => {
@@ -61,6 +70,12 @@ class UserController {
             password: req.body.password
         };
 
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
+
         UserModel.findOne({ email: postData.email }, (err, user: IUser) => {
             if (err || !user) {
                 return res.status(404).json({
@@ -68,9 +83,9 @@ class UserController {
                 });
             }
 
-            if (user.password === postData.password) {
+            if (bcrypt.compareSync(postData.password, user.password)) {
                 const token = createJWTToken(user);
-                res.json({
+                res.status(200).json({
                     status: "success",
                     token
                 });

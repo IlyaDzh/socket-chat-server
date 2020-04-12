@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import isEmail from "validator/lib/isEmail";
+import bcrypt from "bcrypt";
+import { generatePasswordHash } from "../utils";
 
 export interface IUser extends Document {
     email: string;
@@ -26,6 +28,16 @@ const UserSchema = new Schema(
         timestamps: true
     }
 );
+
+UserSchema.pre("save", async function (next) {
+    const user: any = this;
+
+    if (!user.isModified("password")) {
+        return next();
+    }
+
+    user.password = await generatePasswordHash(user.password);
+});
 
 const UserModel = mongoose.model<IUser>("User", UserSchema);
 
