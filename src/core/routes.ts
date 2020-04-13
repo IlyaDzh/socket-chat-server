@@ -1,17 +1,20 @@
 import express from "express";
+import cors from "cors";
+import socket from "socket.io";
 import bodyParser from "body-parser";
 
 import { updateLastSeen, checkAuth } from "../middlewares";
 import { signinValidation, signupValidation } from "../utils/validations";
 import { UserController, MessageController } from "../controllers";
 
-const createRoutes = (app: express.Express) => {
+const createRoutes = (app: express.Express, io: socket.Server) => {
+    app.use(cors());
     app.use(bodyParser.json());
     app.use(checkAuth);
     app.use(updateLastSeen);
 
     const User = new UserController();
-    const Message = new MessageController();
+    const Message = new MessageController(io);
 
     app.get("/user/me", User.getMe);
     app.get("/user/all", User.getAll);

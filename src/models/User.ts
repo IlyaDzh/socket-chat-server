@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
 import isEmail from "validator/lib/isEmail";
-import bcrypt from "bcrypt";
 import { generatePasswordHash } from "../utils";
 
 export interface IUser extends Document {

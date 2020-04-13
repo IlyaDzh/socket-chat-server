@@ -1,17 +1,21 @@
 import express from "express";
 import dotenv from "dotenv";
+import { createServer } from 'http';
 
 dotenv.config();
 
 import "./core/db";
 import createRoutes from "./core/routes";
+import createSocket from './core/socket';
 
 const app = express();
+const http = createServer(app);
+const io = createSocket(http);
 
-createRoutes(app);
+createRoutes(app, io);
 
 const PORT = process.env.PORT || 3003;
 
-app.listen(PORT, () => {
+http.listen(PORT, () => {
     console.log(`Server: http://localhost:${PORT}`);
 });
